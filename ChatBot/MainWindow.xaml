@@ -4,9 +4,136 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatBot"
+        xmlns:converters="clr-namespace:ChatBot.Converters"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" MinHeight="600" MinWidth="450" Width="0" Height="0">
+
+    <Window.Resources>
+
+        <converters:SenderTypeToIco x:Key="SenderTypeToIco"/>
+        <converters:SenderTypeToHorizontalAlignment x:Key="SenderTypeToHorizontalAlignment"/>
+        <converters:NumberDivision x:Key="NumberDivision"/>
+
+        <DataTemplate x:Key="MessageTemplate">
+            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="Green" Margin="5" 
+                    Width="{Binding ElementName=MessageContainerItemsControl, Path=ActualWidth, Converter={StaticResource NumberDivision}}" 
+                    HorizontalAlignment="{Binding Sender, Converter={StaticResource SenderTypeToHorizontalAlignment}}">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Sender, Converter={StaticResource SenderTypeToIco}}"/>
+                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16" FontWeight="Black">Usuario</TextBlock>
+                    </StackPanel>
+                    <TextBlock Margin="4" Text="{Binding Content}"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+
+        <Menu DockPanel.Dock="Top">
+
+            <!--#region FILE-->
+
+            <MenuItem Header="_Archivo">
+                <MenuItem Header="_Nueva conversación" x:Name="File_NewMenuItem">
+                    <MenuItem.Icon>
+                        <Image Source="img/chat.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="_Guardar conversación" x:Name="File_SaveMenuItem">
+                    <MenuItem.Icon>
+                        <Image Source="img/save.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="_Salir" x:Name="File_ExitMenuItem">
+                    <MenuItem.Icon>
+                        <Image Source="img/exit.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--#endregion FILE-->
+
+            <!--#region SETTINGS-->
+
+            <MenuItem Header="_Editar">
+                <MenuItem Header="_Configuración" x:Name="Settings_CofigMenuItem">
+                    <MenuItem.Icon>
+                        <Image Source="img/settings.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="C_omprobar conexión" x:Name="Settings_CheckConnectionMenuItem">
+                    <MenuItem.Icon>
+                        <Image Source="img/check.ico"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+            <!--#endregion SETTINGS-->
+
+
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top">
+
+            <!--#region FILE-->
+
+            <ToolBar>
+                <Button x:Name="NewToolbar">
+                    <Image Source="img/chat.ico"/>
+                </Button>
+                <Button x:Name="SaveToolBar">
+                    <Image Source="img/save.ico"/>
+                </Button>
+            </ToolBar>
+
+            <!--#endregion FILE-->
+
+            <!--#region SETTINGS-->
+
+            <ToolBar>
+                <Button x:Name="SettingsToolbar">
+                    <Image Source="img/settings.ico"/>
+                </Button>
+                <Button x:Name="CheckConnectionToolbar">
+                    <Image Source="img/check.ico"/>
+                </Button>
+            </ToolBar>
+
+            <!--#endregion SETTINGS-->
+
+            <!--#region EXIT-->
+
+            <ToolBar>
+                <Button x:Name="ExitToolbar">
+                    <Image Source="img/exit.ico"/>
+                </Button>
+            </ToolBar>
+
+            <!--#endregion EXIT-->
+
+        </ToolBarTray>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.05*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBox Grid.Column="0" x:Name="NewMessageTexBox">Text</TextBox>
+                    <Button Grid.Column="1" x:Name="SendMessageTexBox" Click="SendButton_Click">Send</Button>
+                </Grid>
+            </StatusBarItem>
+        </StatusBar>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="MessageContainerItemsControl" Background="AntiqueWhite" ItemsSource="{Binding}" 
+                          ItemTemplate="{StaticResource MessageTemplate}"/>
+        </ScrollViewer>
+
+    </DockPanel>
 </Window>
