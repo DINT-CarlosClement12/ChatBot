@@ -22,7 +22,7 @@ namespace ChatBot.Messagging
             set
             {
                 content = value;
-                NotifyPropertyChanged("Content");
+                //NotifyPropertyChanged("Content");
             }
         }
 

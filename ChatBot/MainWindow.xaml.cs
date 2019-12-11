@@ -1,4 +1,5 @@
 ﻿using ChatBot.Messagging;
+using Microsoft.Azure.CognitiveServices.Knowledge.QnAMaker.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,29 +22,45 @@ namespace ChatBot
     {
 
         private ObservableCollection<Message> messages;
-        private bool isBotWritting = false;
+        Bot bot;
 
         public MainWindow()
         {
+            bot = new Bot();
             InitializeComponent();
-            Task initializing = Bot.InitializeAsync();
+            SendMessageButton.DataContext = bot.IsNotProcessing;
 
             messages = new ObservableCollection<Message>();
 
             MessageContainerItemsControl.DataContext = messages;
-            initializing.Wait();
         }
 
-        private void SendButton_Click(object sender, RoutedEventArgs e)
+
+        private async void Send_ExecutedAsync(object sender, ExecutedRoutedEventArgs e)
         {
-            isBotWritting = true;
             string question = NewMessageTexBox.Text;
+            NewMessageTexBox.Text = string.Empty;
             messages.Add(new Message(Message.SenderType.User, question));
 
-            Task<string> questionTask = Bot.MakeQuestion(question);
-            questionTask.Wait();
+            try
+            {
+                await bot.MakeQuestion(question, messages);
+            }
+            catch (ErrorResponseException)
+            {
+                messages.Add(new Message(Message.SenderType.Bot, "Estoy muy cansado"));
+                bot.IsNotProcessing = true;
+            }
+        }
 
-            messages.Add(new Message(Message.SenderType.User, questionTask.Result));
+        private void Send_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = bot.IsNotProcessing;
+        }
+
+        private async void Settings_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            
         }
 
     }

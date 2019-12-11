@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatBot"
         xmlns:converters="clr-namespace:ChatBot.Converters"
+        xmlns:commands="clr-namespace:ChatBot.Commands"
+        xmlns:properties="clr-namespace:ChatBot.Properties"
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="600" MinWidth="450" Width="0" Height="0">
 
@@ -13,9 +15,10 @@
         <converters:SenderTypeToIco x:Key="SenderTypeToIco"/>
         <converters:SenderTypeToHorizontalAlignment x:Key="SenderTypeToHorizontalAlignment"/>
         <converters:NumberDivision x:Key="NumberDivision"/>
+        <converters:SenderTypeToBackgroundColor x:Key="SenderTypeToBackgroundColor"/>
 
         <DataTemplate x:Key="MessageTemplate">
-            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="Green" Margin="5" 
+            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="{Binding Sender, Converter={StaticResource SenderTypeToBackgroundColor}}" Margin="5" 
                     Width="{Binding ElementName=MessageContainerItemsControl, Path=ActualWidth, Converter={StaticResource NumberDivision}}" 
                     HorizontalAlignment="{Binding Sender, Converter={StaticResource SenderTypeToHorizontalAlignment}}">
                 <StackPanel>
@@ -29,6 +32,22 @@
         </DataTemplate>
     </Window.Resources>
 
+    <Window.CommandBindings>
+
+        <!--#region CHAT-->
+
+        <CommandBinding
+            Command="commands:File.Settings"
+            Executed="Settings_Executed"/>
+        <CommandBinding
+            Command="commands:Chat.Send"
+            Executed="Send_ExecutedAsync"
+            CanExecute="Send_CanExecute"/>
+
+        <!--#endregion CHAT-->
+
+    </Window.CommandBindings>
+
     <DockPanel LastChildFill="True">
 
         <Menu DockPanel.Dock="Top">
@@ -41,7 +60,7 @@
                         <Image Source="img/chat.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Guardar conversación" x:Name="File_SaveMenuItem">
+                <MenuItem Header="_Guardar conversación..." x:Name="File_SaveMenuItem">
                     <MenuItem.Icon>
                         <Image Source="img/save.ico"/>
                     </MenuItem.Icon>
@@ -59,7 +78,7 @@
             <!--#region SETTINGS-->
 
             <MenuItem Header="_Editar">
-                <MenuItem Header="_Configuración" x:Name="Settings_CofigMenuItem">
+                <MenuItem Header="_Configuración..." x:Name="Settings_CofigMenuItem" Command="commands:File.Settings">
                     <MenuItem.Icon>
                         <Image Source="img/settings.ico"/>
                     </MenuItem.Icon>
@@ -94,7 +113,7 @@
             <!--#region SETTINGS-->
 
             <ToolBar>
-                <Button x:Name="SettingsToolbar">
+                <Button x:Name="SettingsToolbar" Command="commands:File.Settings">
                     <Image Source="img/settings.ico"/>
                 </Button>
                 <Button x:Name="CheckConnectionToolbar">
@@ -125,14 +144,18 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBox Grid.Column="0" x:Name="NewMessageTexBox">Text</TextBox>
-                    <Button Grid.Column="1" x:Name="SendMessageTexBox" Click="SendButton_Click">Send</Button>
+                    <Button Grid.Column="1" x:Name="SendMessageButton"
+                            Command="commands:Chat.Send">
+                        <Image Source="img/send.ico"/>
+                    </Button>
                 </Grid>
             </StatusBarItem>
         </StatusBar>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="MessageContainerItemsControl" Background="AntiqueWhite" ItemsSource="{Binding}" 
-                          ItemTemplate="{StaticResource MessageTemplate}"/>
+            <ItemsControl x:Name="MessageContainerItemsControl" Background="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor}" 
+                          ItemsSource="{Binding}" 
+                          ItemTemplate="{StaticResource MessageTemplate}" />
         </ScrollViewer>
 
     </DockPanel>
