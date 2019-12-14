@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace ChatBot.Messagging
 {
-    class Message
+    class Message : INotifyPropertyChanged
     {
-
         public enum SenderType { Bot, User }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SenderType Sender { get; set; }
+        private string Metadata { get; set; }
         private string content;
         public string Content
         {
@@ -22,6 +22,7 @@ namespace ChatBot.Messagging
             set
             {
                 content = value;
+                Metadata = DateTime.Now.ToString();
                 //NotifyPropertyChanged("Content");
             }
         }
@@ -35,6 +36,12 @@ namespace ChatBot.Messagging
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public override string ToString()
+        {
+            return $"{Metadata}:\n" +
+                $"\t«{Content}»";
         }
 
     }

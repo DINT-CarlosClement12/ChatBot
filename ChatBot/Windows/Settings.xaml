@@ -4,23 +4,68 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatBot.Windows"
+        xmlns:converters="clr-namespace:ChatBot.Converters"
+        xmlns:properties="clr-namespace:ChatBot.Properties"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
+        Title="Settings" Height="180" Width="400" ResizeMode="NoResize"
+        Closing="Window_Closing">
+
+    <Window.Resources>
+        <converters:StringToColor x:Key="StringToColor"/>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Color de fondo</TextBlock>
-        <ListBox Grid.Column="1" Grid.Row="0"/>
+        <ComboBox Name="BackgroundColorComboBox" Height="20" Margin="10" Grid.Column="1" Grid.Row="0" TabIndex="1"
+                  SelectedItem="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor,Converter={StaticResource StringToColor}, Mode=OneWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
         <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Color de usuario</TextBlock>
+        <ComboBox Name="UserColorComboBox" Height="20" Margin="10" Grid.Column="1" Grid.Row="1" TabIndex="2" 
+                  SelectedItem="{Binding Source={x:Static properties:Settings.Default},Path=UserMessagesColor,Converter={StaticResource StringToColor}, Mode=OneWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
         <TextBlock Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">Color de bot</TextBlock>
+        <ComboBox Name="BotColorComboBox" Height="20" Margin="10" Grid.Column="1" Grid.Row="2" TabIndex="3"
+                  SelectedItem="{Binding Source={x:Static properties:Settings.Default},Path=BotMessagesColor,Converter={StaticResource StringToColor}, Mode=OneWay}">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Rectangle Fill="{Binding Name}" Width="16" Height="16" Margin="0,2,5,2" />
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button Grid.Column="0" Grid.Row="3" Click="Accept_Click" TabIndex="4" Grid.ColumnSpan="2">Accept</Button>
         
     </Grid>
 </Window>

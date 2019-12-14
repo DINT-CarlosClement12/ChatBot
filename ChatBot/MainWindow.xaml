@@ -37,14 +37,46 @@
         <!--#region CHAT-->
 
         <CommandBinding
-            Command="commands:File.Settings"
-            Executed="Settings_Executed"/>
-        <CommandBinding
             Command="commands:Chat.Send"
             Executed="Send_ExecutedAsync"
             CanExecute="Send_CanExecute"/>
 
+        <CommandBinding
+            Command="ApplicationCommands.Save"
+            Executed="Save_Executed"
+            CanExecute="Save_CanExecute"/>
+
+        <CommandBinding
+            Command="commands:Chat.FocusTextBox"
+            Executed="FocusTextBox_Executed"/>
+
         <!--#endregion CHAT-->
+
+        <!--#region SETTINGS-->
+
+        <CommandBinding
+            Command="commands:File.Settings"
+            Executed="Settings_Executed"/>
+
+        <CommandBinding
+            Command="commands:File.CheckConnection"
+            Executed="CheckConnection_Executed"
+            CanExecute="CheckConnection_CanExecute"/>
+
+        <!--#endregion SETTINGS-->
+
+        <!--#region FILE-->
+
+        <CommandBinding
+            Command="ApplicationCommands.New"
+            Executed="New_Executed"
+            CanExecute="New_CanExecute"/>
+
+        <CommandBinding
+            Command="commands:File.Exit"
+            Executed="Exit_Executed"/>
+
+        <!--#endregion FILE-->
 
     </Window.CommandBindings>
 
@@ -55,18 +87,18 @@
             <!--#region FILE-->
 
             <MenuItem Header="_Archivo">
-                <MenuItem Header="_Nueva conversación" x:Name="File_NewMenuItem">
+                <MenuItem Header="_Nueva conversación" x:Name="File_NewMenuItem" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
                         <Image Source="img/chat.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="_Guardar conversación..." x:Name="File_SaveMenuItem">
+                <MenuItem Header="_Guardar conversación..." x:Name="File_SaveMenuItem" Command="ApplicationCommands.Save">
                     <MenuItem.Icon>
                         <Image Source="img/save.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="_Salir" x:Name="File_ExitMenuItem">
+                <MenuItem Header="_Salir" x:Name="File_ExitMenuItem" Command="commands:File.Exit">
                     <MenuItem.Icon>
                         <Image Source="img/exit.ico"/>
                     </MenuItem.Icon>
@@ -83,7 +115,7 @@
                         <Image Source="img/settings.ico"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="C_omprobar conexión" x:Name="Settings_CheckConnectionMenuItem">
+                <MenuItem Header="C_omprobar conexión" x:Name="Settings_CheckConnectionMenuItem" Command="commands:File.CheckConnection">
                     <MenuItem.Icon>
                         <Image Source="img/check.ico"/>
                     </MenuItem.Icon>
@@ -100,10 +132,10 @@
             <!--#region FILE-->
 
             <ToolBar>
-                <Button x:Name="NewToolbar">
+                <Button x:Name="NewToolbar" Command="ApplicationCommands.New">
                     <Image Source="img/chat.ico"/>
                 </Button>
-                <Button x:Name="SaveToolBar">
+                <Button x:Name="SaveToolBar" Command="ApplicationCommands.Save" VerticalAlignment="Top">
                     <Image Source="img/save.ico"/>
                 </Button>
             </ToolBar>
@@ -116,7 +148,7 @@
                 <Button x:Name="SettingsToolbar" Command="commands:File.Settings">
                     <Image Source="img/settings.ico"/>
                 </Button>
-                <Button x:Name="CheckConnectionToolbar">
+                <Button x:Name="CheckConnectionToolbar" Command="commands:File.CheckConnection">
                     <Image Source="img/check.ico"/>
                 </Button>
             </ToolBar>
@@ -126,7 +158,7 @@
             <!--#region EXIT-->
 
             <ToolBar>
-                <Button x:Name="ExitToolbar">
+                <Button x:Name="ExitToolbar" Command="commands:File.Exit">
                     <Image Source="img/exit.ico"/>
                 </Button>
             </ToolBar>
@@ -137,7 +169,7 @@
 
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                <Grid>
+                <Grid MaxHeight="20" Height="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="0.05*"/>

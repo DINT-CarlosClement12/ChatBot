@@ -13,5 +13,15 @@ namespace ChatBot.Commands
         {
             new  KeyGesture(Key.S, ModifierKeys.Alt)
         });
+
+        public static readonly RoutedUICommand CheckConnection = new RoutedUICommand("CheckConnection", "CheckConnection", typeof(File), new InputGestureCollection()
+        {
+            new  KeyGesture(Key.Q, ModifierKeys.Control)
+        });
+
+        public static readonly RoutedUICommand Exit = new RoutedUICommand("Exit", "Exit", typeof(File), new InputGestureCollection()
+        {
+            new  KeyGesture(Key.F4, ModifierKeys.Alt)
+        });
     }
 }

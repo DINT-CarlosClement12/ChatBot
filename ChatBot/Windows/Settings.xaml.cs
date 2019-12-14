@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,9 +20,35 @@ namespace ChatBot.Windows
     /// </summary>
     public partial class Settings : Window
     {
+
         public Settings()
         {
             InitializeComponent();
+            PropertyInfo[] colorItemsSource = typeof(Colors).GetProperties();
+
+            BackgroundColorComboBox.ItemsSource = colorItemsSource;
+            UserColorComboBox.ItemsSource = colorItemsSource;
+            BotColorComboBox.ItemsSource = colorItemsSource;
+        }
+        private void Accept_Click(object sender, RoutedEventArgs e)
+        {
+            string s;
+
+            s = BackgroundColorComboBox.SelectedItem.ToString().Split(' ').Last();
+            Properties.Settings.Default.BackgroundColor = s;
+
+            s = UserColorComboBox.SelectedItem.ToString().Split(' ').Last();
+            Properties.Settings.Default.UserMessagesColor = s;
+
+            s = BotColorComboBox.SelectedItem.ToString().Split(' ').Last();
+            Properties.Settings.Default.BotMessagesColor = s;
+
+            Close();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }

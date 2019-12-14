@@ -13,5 +13,11 @@ namespace ChatBot.Commands
         {
             new  KeyGesture(Key.Enter)
         });
+
+        public static readonly RoutedUICommand FocusTextBox = new RoutedUICommand("FocusTextBox", "FocusTextBox", typeof(Chat), new InputGestureCollection()
+        {
+            new  KeyGesture(Key.K, ModifierKeys.Control)
+        });
+
     }
 }
