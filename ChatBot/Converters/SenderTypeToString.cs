@@ -8,16 +8,16 @@ using System.Windows.Data;
 
 namespace ChatBot.Converters
 {
-    class SenderTypeToHorizontalAlignment : IValueConverter
+    class SenderTypeToString : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             switch ((Messagging.Message.SenderType)value)
             {
                 case Messagging.Message.SenderType.Bot:
-                    return "Right";
+                    return "Bot";
                 case Messagging.Message.SenderType.User:
-                    return "Left";
+                    return "Usuario";
                 default:
                     return "";
             }

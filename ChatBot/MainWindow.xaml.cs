@@ -28,6 +28,7 @@ namespace ChatBot
         private ObservableCollection<Message> messages;
         Bot bot;
         bool isCheckingConnection = false;
+        bool canScrollToEnd = false;    
 
         public MainWindow()
         {
@@ -35,8 +36,8 @@ namespace ChatBot
             messages = new ObservableCollection<Message>();
 
             InitializeComponent();
-            SendMessageButton.DataContext = bot.IsNotProcessing;
 
+            SendMessageButton.DataContext = bot.IsNotProcessing;
             MessageContainerItemsControl.DataContext = messages;
         }
 
@@ -49,6 +50,7 @@ namespace ChatBot
 
             try
             {
+                canScrollToEnd = true;
                 await bot.MakeQuestion(question, messages);
             }
             catch (ErrorResponseException)
@@ -72,7 +74,6 @@ namespace ChatBot
         {
             Settings settingsWindow = new Settings();
             settingsWindow.ShowDialog();
-            //Owner = settingsWindow;
         }
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -137,9 +138,13 @@ namespace ChatBot
             Close();
         }
 
-        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        private void MessagesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            MessagesScrollViewer.ScrollToEnd();
+            if (canScrollToEnd)
+            {
+                MessagesScrollViewer.ScrollToEnd();
+                canScrollToEnd = false;
+            }
         }
     }
 }

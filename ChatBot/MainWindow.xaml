@@ -14,8 +14,8 @@
     <Window.Resources>
 
         <converters:SenderTypeToIco x:Key="SenderTypeToIco"/>
-        <converters:SenderTypeToHorizontalAlignment x:Key="SenderTypeToHorizontalAlignment"/>
         <converters:NumberDivision x:Key="NumberDivision"/>
+        <converters:SenderTypeToString x:Key="SenderTypeToString"/>
 
         <Style TargetType="Border" x:Key="MessageStyle">
             <Setter Property="Background" Value="{Binding Source={x:Static properties:Settings.Default},Path=UserMessagesColor}" />
@@ -24,10 +24,11 @@
             <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Width" Value="{Binding ElementName=MessageContainerItemsControl, Path=ActualWidth, Converter={StaticResource NumberDivision}}"/>
-            <Setter Property="HorizontalAlignment" Value="{Binding Sender, Converter={StaticResource SenderTypeToHorizontalAlignment}}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Sender}" Value="{x:Static messaging:Message+SenderType.Bot}">
                     <Setter Property="Background" Value="{Binding Source={x:Static properties:Settings.Default},Path=BotMessagesColor}" />
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -37,7 +38,8 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding Sender, Converter={StaticResource SenderTypeToIco}}"/>
-                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16" FontWeight="Black">Usuario</TextBlock>
+                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16" FontWeight="Black"
+                                   Text="{Binding Sender, Converter={StaticResource SenderTypeToString}}"/>
                     </StackPanel>
                     <TextBlock Margin="10" Text="{Binding Content}" TextWrapping="Wrap"/>
                 </StackPanel>
@@ -197,7 +199,7 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ScrollViewer Name="MessagesScrollViewer" VerticalScrollBarVisibility="Visible" ScrollChanged="ScrollViewer_ScrollChanged" >
+        <ScrollViewer Name="MessagesScrollViewer" VerticalScrollBarVisibility="Visible" ScrollChanged="MessagesScrollViewer_ScrollChanged">
             <ItemsControl x:Name="MessageContainerItemsControl" Background="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor}" 
                           ItemsSource="{Binding}" 
                           ItemTemplate="{StaticResource MessageTemplate}" />

@@ -10,24 +10,15 @@ using System.Threading.Tasks;
 
 namespace ChatBot.Messagging
 {
-    class Bot : INotifyPropertyChanged
+    class Bot
     {
 
         const string DEFAULT_NOT_FOUND_ANSWER = "No good match found in KB.";
+        const string DEFAULT_NOT_FOUND_ANSWER_TO_CLIENT = "¿Que si quiero o que si tengo?";
 
-        public event PropertyChangedEventHandler PropertyChanged;
         private readonly QnAMakerRuntimeClient cliente;
 
-        private bool isNotProcessing;
-        public bool IsNotProcessing
-        {
-            get { return isNotProcessing; }
-            set
-            {
-                isNotProcessing = value;
-                OnPropertyChanged("IsNotProcessing");
-            }
-        }
+        public bool IsNotProcessing { get; set; }
 
         public Bot()
         {
@@ -45,7 +36,7 @@ namespace ChatBot.Messagging
 
             string responseString = response.Answers[0].Answer;
 
-            messages.Add(new Message(Message.SenderType.Bot, responseString == DEFAULT_NOT_FOUND_ANSWER ? "¿Que si quiero o que si tengo?" : responseString));
+            messages.Add(new Message(Message.SenderType.Bot, responseString == DEFAULT_NOT_FOUND_ANSWER ? DEFAULT_NOT_FOUND_ANSWER_TO_CLIENT : responseString));
             IsNotProcessing = true;
         }
 
@@ -60,11 +51,6 @@ namespace ChatBot.Messagging
                 return false;
             }
             return true;   
-        }
-
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
     }
