@@ -58,5 +58,32 @@ namespace ChatBot.Properties {
                 this["BotMessagesColor"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("e3c48047-80d3-4450-9231-ed4d0985840d")]
+        public string AzureBotId {
+            get {
+                return ((string)(this["AzureBotId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("38249f96-77a1-46e2-adf4-f29195b93211")]
+        public string AzureBotKey {
+            get {
+                return ((string)(this["AzureBotKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://botisma.azurewebsites.net")]
+        public string AzureBotEndPoint {
+            get {
+                return ((string)(this["AzureBotEndPoint"]));
+            }
+        }
     }
 }

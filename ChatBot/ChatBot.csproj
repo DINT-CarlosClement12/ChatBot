@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>img\icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Azure.CognitiveServices.Knowledge.QnAMaker, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.CognitiveServices.Knowledge.QnAMaker.1.1.0\lib\net461\Microsoft.Azure.CognitiveServices.Knowledge.QnAMaker.dll</HintPath>
@@ -113,7 +116,6 @@
     <Compile Include="Commands\Chat.cs" />
     <Compile Include="Converters\SenderTypeToHorizontalAlignment.cs" />
     <Compile Include="Converters\NumberDivision.cs" />
-    <Compile Include="Converters\SenderTypeToBackgroundColor.cs" />
     <Compile Include="Converters\SenderTypeToIco.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -166,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="img\send.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -13,6 +13,8 @@ namespace ChatBot.Messagging
     class Bot : INotifyPropertyChanged
     {
 
+        const string DEFAULT_NOT_FOUND_ANSWER = "No good match found in KB.";
+
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly QnAMakerRuntimeClient cliente;
 
@@ -29,28 +31,29 @@ namespace ChatBot.Messagging
 
         public Bot()
         {
-            string EndPoint = "https://botisma.azurewebsites.net/qnamaker";
-            string Key = "38249f96-77a1-46e2-adf4-f29195b93211";
-            cliente = new QnAMakerRuntimeClient(new EndpointKeyServiceClientCredentials(Key)) { RuntimeEndpoint = EndPoint };
+            cliente = new QnAMakerRuntimeClient(new EndpointKeyServiceClientCredentials(Properties.Settings.Default.AzureBotKey))
+            {
+                RuntimeEndpoint = Properties.Settings.Default.AzureBotEndPoint
+            };
             IsNotProcessing = true;
         }
 
         public async Task MakeQuestion(string question, ObservableCollection<Message> messages)
         {
             IsNotProcessing = false;
-            string id = "e3c48047-80d3-4450-9231-ed4d0985840d";
-            QnASearchResultList response = await cliente.Runtime.GenerateAnswerAsync(id, new QueryDTO { Question = question });
-            
-            messages.Add(new Message(Message.SenderType.User, response.Answers[0].Answer));
+            QnASearchResultList response = await cliente.Runtime.GenerateAnswerAsync(Properties.Settings.Default.AzureBotId, new QueryDTO { Question = question });
+
+            string responseString = response.Answers[0].Answer;
+
+            messages.Add(new Message(Message.SenderType.Bot, responseString == DEFAULT_NOT_FOUND_ANSWER ? "¿Que si quiero o que si tengo?" : responseString));
             IsNotProcessing = true;
         }
 
         public async Task<bool> CheckConnectionAsync()
         {
-            string id = "e3c48047-80d3-4450-9231-ed4d0985840d";
             try
             {
-                QnASearchResultList response = await cliente.Runtime.GenerateAnswerAsync(id, new QueryDTO { Question = "Test" });
+                await cliente.Runtime.GenerateAnswerAsync(Properties.Settings.Default.AzureBotId, new QueryDTO { Question = "Test" });
             }
             catch(Exception)
             {

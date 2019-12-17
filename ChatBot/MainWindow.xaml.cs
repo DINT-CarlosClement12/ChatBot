@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Net.Http;
 
 namespace ChatBot
 {
@@ -53,6 +54,11 @@ namespace ChatBot
             catch (ErrorResponseException)
             {
                 messages.Add(new Message(Message.SenderType.Bot, "Estoy muy cansado"));
+                bot.IsNotProcessing = true;
+            }
+            catch (HttpRequestException)
+            {
+                messages.Add(new Message(Message.SenderType.Bot, "No me encuentro bien señor Stark"));
                 bot.IsNotProcessing = true;
             }
         }
@@ -129,6 +135,11 @@ namespace ChatBot
         private void Exit_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             Close();
+        }
+
+        private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            MessagesScrollViewer.ScrollToEnd();
         }
     }
 }

@@ -11,5 +11,14 @@
     <Setting Name="BotMessagesColor" Type="System.String" Scope="User">
       <Value Profile="(Default)">Red</Value>
     </Setting>
+    <Setting Name="AzureBotId" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">e3c48047-80d3-4450-9231-ed4d0985840d</Value>
+    </Setting>
+    <Setting Name="AzureBotKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">38249f96-77a1-46e2-adf4-f29195b93211</Value>
+    </Setting>
+    <Setting Name="AzureBotEndPoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://botisma.azurewebsites.net</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

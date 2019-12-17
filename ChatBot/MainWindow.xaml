@@ -6,27 +6,40 @@
         xmlns:local="clr-namespace:ChatBot"
         xmlns:converters="clr-namespace:ChatBot.Converters"
         xmlns:commands="clr-namespace:ChatBot.Commands"
+        xmlns:messaging="clr-namespace:ChatBot.Messagging"
         xmlns:properties="clr-namespace:ChatBot.Properties"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="600" MinWidth="450" Width="0" Height="0">
+        Title="Manuel, el bot deficiente" MinHeight="600" MinWidth="450" Width="0" Height="0" Icon="img/icon.ico">
 
     <Window.Resources>
 
         <converters:SenderTypeToIco x:Key="SenderTypeToIco"/>
         <converters:SenderTypeToHorizontalAlignment x:Key="SenderTypeToHorizontalAlignment"/>
         <converters:NumberDivision x:Key="NumberDivision"/>
-        <converters:SenderTypeToBackgroundColor x:Key="SenderTypeToBackgroundColor"/>
+
+        <Style TargetType="Border" x:Key="MessageStyle">
+            <Setter Property="Background" Value="{Binding Source={x:Static properties:Settings.Default},Path=UserMessagesColor}" />
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Width" Value="{Binding ElementName=MessageContainerItemsControl, Path=ActualWidth, Converter={StaticResource NumberDivision}}"/>
+            <Setter Property="HorizontalAlignment" Value="{Binding Sender, Converter={StaticResource SenderTypeToHorizontalAlignment}}"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Sender}" Value="{x:Static messaging:Message+SenderType.Bot}">
+                    <Setter Property="Background" Value="{Binding Source={x:Static properties:Settings.Default},Path=BotMessagesColor}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
 
         <DataTemplate x:Key="MessageTemplate">
-            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="15" Background="{Binding Sender, Converter={StaticResource SenderTypeToBackgroundColor}}" Margin="5" 
-                    Width="{Binding ElementName=MessageContainerItemsControl, Path=ActualWidth, Converter={StaticResource NumberDivision}}" 
-                    HorizontalAlignment="{Binding Sender, Converter={StaticResource SenderTypeToHorizontalAlignment}}">
+            <Border Style="{StaticResource MessageStyle}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding Sender, Converter={StaticResource SenderTypeToIco}}"/>
                         <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16" FontWeight="Black">Usuario</TextBlock>
                     </StackPanel>
-                    <TextBlock Margin="4" Text="{Binding Content}"/>
+                    <TextBlock Margin="10" Text="{Binding Content}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
@@ -184,7 +197,7 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Name="MessagesScrollViewer" VerticalScrollBarVisibility="Visible" ScrollChanged="ScrollViewer_ScrollChanged" >
             <ItemsControl x:Name="MessageContainerItemsControl" Background="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor}" 
                           ItemsSource="{Binding}" 
                           ItemTemplate="{StaticResource MessageTemplate}" />
