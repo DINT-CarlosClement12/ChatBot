@@ -37,7 +37,6 @@ namespace ChatBot.Messagging
             string responseString = response.Answers[0].Answer;
 
             messages.Add(new Message(Message.SenderType.Bot, responseString == DEFAULT_NOT_FOUND_ANSWER ? DEFAULT_NOT_FOUND_ANSWER_TO_CLIENT : responseString));
-            IsNotProcessing = true;
         }
 
         public async Task<bool> CheckConnectionAsync()

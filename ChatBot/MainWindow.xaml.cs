@@ -25,6 +25,9 @@ namespace ChatBot
     public partial class MainWindow : Window
     {
 
+        private const string ERROR_RESPONSE_MESSAGE = "Estoy muy cansado";
+        private const string ERROR_HTTP_REQUEST_MESSAGE = "No me encuentro bien señor Stark";
+
         private ObservableCollection<Message> messages;
         Bot bot;
         bool isCheckingConnection = false;
@@ -41,6 +44,17 @@ namespace ChatBot
             MessageContainerItemsControl.DataContext = messages;
         }
 
+        // To scroll to the bottom when new item is added to the list
+        private void MessagesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (canScrollToEnd)     // If new item is being added to the list. If it false means that user is scrolling manually
+            {
+                MessagesScrollViewer.ScrollToEnd();
+                canScrollToEnd = false;     // The message is no longer being added
+            }
+        }
+
+        #region COMMANDS
 
         private async void Send_ExecutedAsync(object sender, ExecutedRoutedEventArgs e)
         {
@@ -50,18 +64,20 @@ namespace ChatBot
 
             try
             {
-                canScrollToEnd = true;
+                canScrollToEnd = true;      // The message is being added
                 await bot.MakeQuestion(question, messages);
             }
             catch (ErrorResponseException)
             {
-                messages.Add(new Message(Message.SenderType.Bot, "Estoy muy cansado"));
-                bot.IsNotProcessing = true;
+                messages.Add(new Message(Message.SenderType.Bot, ERROR_RESPONSE_MESSAGE));
             }
             catch (HttpRequestException)
             {
-                messages.Add(new Message(Message.SenderType.Bot, "No me encuentro bien señor Stark"));
-                bot.IsNotProcessing = true;
+                messages.Add(new Message(Message.SenderType.Bot, ERROR_HTTP_REQUEST_MESSAGE));
+            }
+            finally
+            {
+                bot.IsNotProcessing = true;     // Whatever happens, we have to say that the bot is not processing anything
             }
         }
 
@@ -91,9 +107,7 @@ namespace ChatBot
             if(folderSelectorDialog.ShowDialog() == CommonFileDialogResult.Ok)
                 foreach(Message message in messages)
                     using (StreamWriter file = new StreamWriter(folderSelectorDialog.FileName, true))
-                    {
                         file.WriteLine(message);
-                    }
             
         }
 
@@ -138,13 +152,7 @@ namespace ChatBot
             Close();
         }
 
-        private void MessagesScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-        {
-            if (canScrollToEnd)
-            {
-                MessagesScrollViewer.ScrollToEnd();
-                canScrollToEnd = false;
-            }
-        }
+        #endregion COMMANDS
+
     }
 }

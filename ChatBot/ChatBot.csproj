@@ -100,7 +100,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\SenderTypeToString.cs" />
     <Compile Include="Converters\StringToColor.cs" />
     <Compile Include="Windows\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
@@ -116,7 +115,6 @@
     <Compile Include="Commands\File.cs" />
     <Compile Include="Commands\Chat.cs" />
     <Compile Include="Converters\NumberDivision.cs" />
-    <Compile Include="Converters\SenderTypeToIco.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

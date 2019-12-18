@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChatBot"
         xmlns:converters="clr-namespace:ChatBot.Converters"
         xmlns:commands="clr-namespace:ChatBot.Commands"
         xmlns:messaging="clr-namespace:ChatBot.Messagging"
@@ -13,9 +12,7 @@
 
     <Window.Resources>
 
-        <converters:SenderTypeToIco x:Key="SenderTypeToIco"/>
         <converters:NumberDivision x:Key="NumberDivision"/>
-        <converters:SenderTypeToString x:Key="SenderTypeToString"/>
 
         <Style TargetType="Border" x:Key="MessageStyle">
             <Setter Property="Background" Value="{Binding Source={x:Static properties:Settings.Default},Path=UserMessagesColor}" />
@@ -33,18 +30,42 @@
             </Style.Triggers>
         </Style>
 
+        <Style TargetType="TextBlock" x:Key="UsernameStyle">
+            <Setter Property="Text" Value="Usuario"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="20,0,0,0"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Sender}" Value="{x:Static messaging:Message+SenderType.Bot}">
+                    <Setter Property="Text" Value="Bot"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Image" x:Key="UserIconStyle">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Source" Value="img/user.ico"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Sender}" Value="{x:Static messaging:Message+SenderType.Bot}">
+                    <Setter Property="Source" Value="img/bot.ico"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
         <DataTemplate x:Key="MessageTemplate">
             <Border Style="{StaticResource MessageStyle}">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Sender, Converter={StaticResource SenderTypeToIco}}"/>
-                        <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="16" FontWeight="Black"
-                                   Text="{Binding Sender, Converter={StaticResource SenderTypeToString}}"/>
+                        <Image Style="{StaticResource UserIconStyle}"/>
+                        <TextBlock Style="{StaticResource UsernameStyle}"/>
                     </StackPanel>
                     <TextBlock Margin="10" Text="{Binding Content}" TextWrapping="Wrap"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
+        
     </Window.Resources>
 
     <Window.CommandBindings>
@@ -190,7 +211,8 @@
                         <ColumnDefinition Width="0.05*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox Grid.Column="0" x:Name="NewMessageTexBox">Text</TextBox>
+                    <TextBox Grid.Column="0" x:Name="NewMessageTexBox"/>
+                    
                     <Button Grid.Column="1" x:Name="SendMessageButton"
                             Command="commands:Chat.Send">
                         <Image Source="img/send.ico"/>
@@ -200,7 +222,8 @@
         </StatusBar>
 
         <ScrollViewer Name="MessagesScrollViewer" VerticalScrollBarVisibility="Visible" ScrollChanged="MessagesScrollViewer_ScrollChanged">
-            <ItemsControl x:Name="MessageContainerItemsControl" Background="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor}" 
+            <ItemsControl x:Name="MessageContainerItemsControl" 
+                          Background="{Binding Source={x:Static properties:Settings.Default},Path=BackgroundColor}" 
                           ItemsSource="{Binding}" 
                           ItemTemplate="{StaticResource MessageTemplate}" />
         </ScrollViewer>
